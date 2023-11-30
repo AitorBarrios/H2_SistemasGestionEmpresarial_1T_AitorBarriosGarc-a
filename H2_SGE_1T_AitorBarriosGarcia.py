@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import tkinter as tk
 import sqlite3
+import pandas as pd
 from PIL import Image
 from tkinter import messagebox,ttk,Scrollbar,Label,Entry,Button,END
 
@@ -23,6 +24,10 @@ det = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Ge
                     dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//detalle.png"),size=(70,70))
 bus = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//busqueda.png"),
                     dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//busqueda.png"),size=(70,70))
+gra = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//grafico.png"),
+                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//grafico.png"),size=(70,70))
+exl = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//excel.png"),
+                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//excel.png"),size=(70,70))
 
 def vCat():
     def crear_reg():
@@ -609,14 +614,14 @@ def vBus():
         id_det = ent_IDBUS.get()
 
         my_conn = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
-        r_set = my_conn.execute('''SELECT detalle.iddet, cliente.nombre, cliente.direccion, pedido.fecha, detalle.cantidad FROM detalle INNER JOIN cliente ON detalle.idcli = cliente.idcli INNER JOIN pedido ON detalle.idped = pedido.idped WHERE detalle.iddet = ?''', (id_det,))
+        cursor = my_conn.execute('''SELECT detalle.iddet, cliente.nombre, cliente.direccion, pedido.fecha, detalle.cantidad FROM detalle INNER JOIN cliente ON detalle.idcli = cliente.idcli INNER JOIN pedido ON detalle.idped = pedido.idped WHERE detalle.iddet = ?''', (id_det,))
 
         i = 1
-        for student in r_set:
-            for j in range(len(student)):
+        for registro in cursor:
+            for j in range(len(registro)):
                 e = Entry(vBus, width=10, fg='blue')
                 e.grid(row=i, column=j+1)
-                e.insert(END, student[j])
+                e.insert(END, registro[j])
             i = i + 1
 
     vBus = ctk.CTkToplevel(ventana)
@@ -631,17 +636,56 @@ def vBus():
     bt_IDBUS = ctk.CTkButton(vBus, text="Buscar", fg_color="#565b5e", hover_color="#6954a7", command=buscar_reg)
     bt_IDBUS.grid(row=2, column=0, padx=10, pady=10)
     lbl_id = ctk.CTkLabel(vBus,text="ID", font=("Algerian", 10))
-    lbl_id.grid(row=0,column=1)
+    lbl_id.grid(row=0,column=1,columnspan=5)
     lbl_cli = ctk.CTkLabel(vBus,text="Cliente", font=("Algerian", 10))
-    lbl_cli.grid(row=0,column=2)
+    lbl_cli.grid(row=0,column=2,columnspan=5)
     lbl_direc = ctk.CTkLabel(vBus,text="Direccion", font=("Algerian", 10))
-    lbl_direc.grid(row=0,column=3)
+    lbl_direc.grid(row=0,column=3,columnspan=5)
     lbl_fecha = ctk.CTkLabel(vBus,text="Fecha", font=("Algerian", 10))
-    lbl_fecha.grid(row=0,column=4)
+    lbl_fecha.grid(row=0,column=4,columnspan=5)
     lbl_cant = ctk.CTkLabel(vBus,text="Cantidad", font=("Algerian", 10))
-    lbl_cant.grid(row=0,column=5)
+    lbl_cant.grid(row=0,column=5,columnspan=5)
 
     vBus.mainloop()
+
+def vGra():
+    vGra = ctk.CTkToplevel(ventana)
+    vGra.title("Graficos")
+    vGra.resizable(False, False)
+    vGra.geometry("1000x750")
+
+    vGra.mainloop()
+
+def vExp():
+    vExp = ctk.CTkToplevel(ventana)
+    vExp.title("Graficos")
+    vExp.resizable(False, False)
+    vExp.geometry("200x200")
+
+    def exportar():
+        conn = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
+
+        tablas = ['categoria', 'cliente', 'producto', 'pedido', 'detalle']
+
+        archivo_excel = 'output.xlsx'
+
+        with pd.ExcelWriter(archivo_excel, engine='xlsxwriter') as writer:
+            for tabla in tablas:
+                query = f'SELECT * FROM {tabla}'
+                
+                df = pd.read_sql_query(query, conn)
+                
+                df.to_excel(writer, sheet_name=tabla, index=False)
+
+        conn.close()
+
+        print(f'Datos exportados exitosamente a {archivo_excel}')
+        messagebox.showinfo("✔","Datos exportados")
+
+
+    bt_exportar = ctk.CTkButton(vExp,text="Exportar",command=exportar, fg_color="#565b5e", hover_color="#6954a7")
+    bt_exportar.grid(row=0,column=0,padx=10,pady=10)
+    vExp.mainloop()
 
 
 lbl_TITULO = ctk.CTkLabel(ventana,text="BIENVENIDO A SUPERBARRIOS",font=("Algerian",25))
@@ -676,7 +720,17 @@ lbl_DETALLE.grid(row=4,column=2, padx=10,pady=10)
 
 bt_BUSQUEDA = ctk.CTkButton(ventana, height=125, width=125,image=bus,text="", command=vBus, fg_color='#9be3c7', hover_color="#FFFFFF")#
 bt_BUSQUEDA.grid(row=3,column=3, padx=10, pady=10)
-lbl_BUSQUEDA = ctk.CTkLabel(ventana,text="Detalle", font=("Algerian",15))
+lbl_BUSQUEDA = ctk.CTkLabel(ventana,text="Busqueda", font=("Algerian",15))
 lbl_BUSQUEDA.grid(row=4,column=3, padx=10,pady=10)
+
+bt_GRAFICO = ctk.CTkButton(ventana, height=125, width=125,image=gra,text="", command=vGra, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_GRAFICO.grid(row=5,column=1, padx=10, pady=10)
+lbl_GRAFICO = ctk.CTkLabel(ventana,text="Graficos", font=("Algerian",15))
+lbl_GRAFICO.grid(row=6,column=1, padx=10,pady=10)
+
+bt_GRAFICO = ctk.CTkButton(ventana, height=125, width=125,image=exl,text="", command=vExp, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_GRAFICO.grid(row=5,column=2, padx=10, pady=10)
+lbl_GRAFICO = ctk.CTkLabel(ventana,text="Exportar", font=("Algerian",15))
+lbl_GRAFICO.grid(row=6,column=2, padx=10,pady=10)
 
 ventana.mainloop()

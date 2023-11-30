@@ -2,6 +2,7 @@ import customtkinter as ctk
 import tkinter as tk
 import sqlite3
 import pandas as pd
+import matplotlib.pyplot as plt
 from PIL import Image
 from tkinter import messagebox,ttk,Scrollbar,Label,Entry,Button,END
 
@@ -654,38 +655,41 @@ def vGra():
     vGra.resizable(False, False)
     vGra.geometry("1000x750")
 
+    dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="producto")
+
+    datos = dataframe.iloc[1,2:]
+
+    productos = dataframe.iloc[1,1:]
+
+    fig, ax = plt.subplots()
+
+    ax.set_xlabel('Productos')
+    ax.set_ylabel('Cantidad de Stock')
+    ax.bar(productos,datos)
+    plt.show()
+
     vGra.mainloop()
 
-def vExp():
-    vExp = ctk.CTkToplevel(ventana)
-    vExp.title("Graficos")
-    vExp.resizable(False, False)
-    vExp.geometry("200x200")
 
-    def exportar():
-        conn = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
+def exportar():
+    conn = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
 
-        tablas = ['categoria', 'cliente', 'producto', 'pedido', 'detalle']
+    tablas = ['categoria', 'cliente', 'producto', 'pedido', 'detalle']
 
-        archivo_excel = 'output.xlsx'
+    archivo_excel = 'H2_SGE_1T_AitorBarriosGarcia.xlsx'
 
-        with pd.ExcelWriter(archivo_excel, engine='xlsxwriter') as writer:
-            for tabla in tablas:
-                query = f'SELECT * FROM {tabla}'
-                
-                df = pd.read_sql_query(query, conn)
-                
-                df.to_excel(writer, sheet_name=tabla, index=False)
+    with pd.ExcelWriter(archivo_excel, engine='xlsxwriter') as writer:
+        for tabla in tablas:
+            query = f'SELECT * FROM {tabla}'
+            
+            df = pd.read_sql_query(query, conn)
+            
+            df.to_excel(writer, sheet_name=tabla, index=False)
 
-        conn.close()
+    conn.close()
 
-        print(f'Datos exportados exitosamente a {archivo_excel}')
-        messagebox.showinfo("✔","Datos exportados")
-
-
-    bt_exportar = ctk.CTkButton(vExp,text="Exportar",command=exportar, fg_color="#565b5e", hover_color="#6954a7")
-    bt_exportar.grid(row=0,column=0,padx=10,pady=10)
-    vExp.mainloop()
+    print(f'Datos exportados exitosamente a {archivo_excel}')
+    messagebox.showinfo("✔","Datos exportados")
 
 
 lbl_TITULO = ctk.CTkLabel(ventana,text="BIENVENIDO A SUPERBARRIOS",font=("Algerian",25))
@@ -728,7 +732,7 @@ bt_GRAFICO.grid(row=5,column=1, padx=10, pady=10)
 lbl_GRAFICO = ctk.CTkLabel(ventana,text="Graficos", font=("Algerian",15))
 lbl_GRAFICO.grid(row=6,column=1, padx=10,pady=10)
 
-bt_GRAFICO = ctk.CTkButton(ventana, height=125, width=125,image=exl,text="", command=vExp, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_GRAFICO = ctk.CTkButton(ventana, height=125, width=125,image=exl,text="", command=exportar, fg_color='#9be3c7', hover_color="#FFFFFF")#
 bt_GRAFICO.grid(row=5,column=2, padx=10, pady=10)
 lbl_GRAFICO = ctk.CTkLabel(ventana,text="Exportar", font=("Algerian",15))
 lbl_GRAFICO.grid(row=6,column=2, padx=10,pady=10)

@@ -13,7 +13,7 @@ ventana.resizable(False,False)
 ventana.geometry("1000x750")
 
 
-cat = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//categoria.png"),
+""" cat = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//categoria.png"),
                     dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//categoria.png"),size=(70,70))
 cli = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//cliente.png"),
                     dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//cliente.png"),size=(100,80))
@@ -28,7 +28,7 @@ bus = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Ge
 gra = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//grafico.png"),
                     dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//grafico.png"),size=(70,70))
 exl = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//excel.png"),
-                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//excel.png"),size=(70,70))
+                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//excel.png"),size=(70,70)) """
 
 def vCat():
     def crear_reg():
@@ -110,9 +110,16 @@ def vCat():
     bt_modificar = ctk.CTkButton(vCat,text="Modificar",command=modificar_reg, fg_color="#565b5e", hover_color="#6954a7")
     bt_modificar.grid(row=1,column=2,padx=10,pady=10)
 
+    def ordenar_columna(tree, col, reverse):
+        data = [ (tree.set(child, col), child) for child in tree.get_children('')]
+        data.sort(reverse=reverse)
+        for i, item in enumerate(data):
+            tree.move(item[1], '', i)
+        tree.heading(col, command=lambda: ordenar_columna(tree, col, not reverse))
+
     lista_reg = ttk.Treeview(vCat,columns=("ID","Nombre"),show="headings",selectmode="browse")
-    lista_reg.heading("ID",text="ID")
-    lista_reg.heading("Nombre",text="Nombre")
+    lista_reg.heading("ID",text="ID", command=lambda: ordenar_columna(lista_reg, "ID", False))
+    lista_reg.heading("Nombre",text="Nombre", command=lambda: ordenar_columna(lista_reg, "Nombre", False))
     lista_reg.column("ID",width=200)
     lista_reg.column("Nombre",width=200)
 
@@ -235,13 +242,20 @@ def vCli():
     bt_modificar = ctk.CTkButton(vCli,text="Modificar",command=modificar_reg, fg_color="#565b5e", hover_color="#6954a7")
     bt_modificar.grid(row=8,column=0,padx=10,pady=10)
 
+    def ordenar_columna(tree, col, reverse):
+        data = [ (tree.set(child, col), child) for child in tree.get_children('')]
+        data.sort(reverse=reverse)
+        for i, item in enumerate(data):
+            tree.move(item[1], '', i)
+        tree.heading(col, command=lambda: ordenar_columna(tree, col, not reverse))
+
     lista_reg = ttk.Treeview(vCli,columns=("ID","Nombre","Apellido","Telefono","Mail","Direccion"),show="headings",selectmode="browse")
-    lista_reg.heading("ID",text="ID")
-    lista_reg.heading("Nombre",text="Nombre")
-    lista_reg.heading("Apellido",text="Apellido")
-    lista_reg.heading("Telefono",text="Telefono")
-    lista_reg.heading("Mail",text="Mail")
-    lista_reg.heading("Direccion",text="Direccion")
+    lista_reg.heading("ID",text="ID", command=lambda: ordenar_columna(lista_reg, "ID", False))
+    lista_reg.heading("Nombre",text="Nombre", command=lambda: ordenar_columna(lista_reg, "Nombre", False))
+    lista_reg.heading("Apellido",text="Apellido", command=lambda: ordenar_columna(lista_reg, "Apellido", False))
+    lista_reg.heading("Telefono",text="Telefono", command=lambda: ordenar_columna(lista_reg, "Telefono", False))
+    lista_reg.heading("Mail",text="Mail", command=lambda: ordenar_columna(lista_reg, "Mail", False))
+    lista_reg.heading("Direccion",text="Direccion", command=lambda: ordenar_columna(lista_reg, "Direccion", False))
     lista_reg.column("ID",width=110)
     lista_reg.column("Nombre",width=110)
     lista_reg.column("Apellido",width=110)
@@ -360,12 +374,19 @@ def vPro():
     bt_modificar = ctk.CTkButton(vPro,text="Modificar",command=modificar_reg, fg_color="#565b5e", hover_color="#6954a7")
     bt_modificar.grid(row=7,column=0,padx=10,pady=10)
 
+    def ordenar_columna(tree, col, reverse):
+        data = [ (tree.set(child, col), child) for child in tree.get_children('')]
+        data.sort(reverse=reverse)
+        for i, item in enumerate(data):
+            tree.move(item[1], '', i)
+        tree.heading(col, command=lambda: ordenar_columna(tree, col, not reverse))
+
     lista_reg = ttk.Treeview(vPro,columns=("ID","Nombre","Stock","Precio","ID Categoria"),show="headings",selectmode="browse")
-    lista_reg.heading("ID",text="ID")
-    lista_reg.heading("Nombre",text="Nombre")
-    lista_reg.heading("Stock",text="Stock")
-    lista_reg.heading("Precio",text="Precio")
-    lista_reg.heading("ID Categoria",text="ID Categoria")
+    lista_reg.heading("ID",text="ID", command=lambda: ordenar_columna(lista_reg, "ID", False))
+    lista_reg.heading("Nombre",text="Nombre", command=lambda: ordenar_columna(lista_reg, "Nombre", False))
+    lista_reg.heading("Stock",text="Stock", command=lambda: ordenar_columna(lista_reg, "Stock", False))
+    lista_reg.heading("Precio",text="Precio", command=lambda: ordenar_columna(lista_reg, "Precio", False))
+    lista_reg.heading("ID Categoria",text="ID Categoria", command=lambda: ordenar_columna(lista_reg, "ID Categoria", False))
     lista_reg.column("ID",width=120)
     lista_reg.column("Nombre",width=120)
     lista_reg.column("Stock",width=120)
@@ -476,11 +497,18 @@ def vPed():
     bt_modificar = ctk.CTkButton(vPed,text="Modificar",command=modificar_reg, fg_color="#565b5e", hover_color="#6954a7")
     bt_modificar.grid(row=6,column=0,padx=10,pady=10)
 
+    def ordenar_columna(tree, col, reverse):
+        data = [ (tree.set(child, col), child) for child in tree.get_children('')]
+        data.sort(reverse=reverse)
+        for i, item in enumerate(data):
+            tree.move(item[1], '', i)
+        tree.heading(col, command=lambda: ordenar_columna(tree, col, not reverse))
+
     lista_reg = ttk.Treeview(vPed,columns=("ID","ID Cliente","ID Producto","Fecha"),show="headings",selectmode="browse")
-    lista_reg.heading("ID",text="ID")
-    lista_reg.heading("ID Cliente",text="ID Cliente")
-    lista_reg.heading("ID Producto",text="ID Producto")
-    lista_reg.heading("Fecha",text="Fecha")
+    lista_reg.heading("ID",text="ID", command=lambda: ordenar_columna(lista_reg, "ID", False))
+    lista_reg.heading("ID Cliente",text="ID Cliente", command=lambda: ordenar_columna(lista_reg, "ID Cliente", False))
+    lista_reg.heading("ID Producto",text="ID Producto", command=lambda: ordenar_columna(lista_reg, "ID Producto", False))
+    lista_reg.heading("Fecha",text="Fecha", command=lambda: ordenar_columna(lista_reg, "Fecha", False))
     lista_reg.column("ID",width=150)
     lista_reg.column("ID Cliente",width=150)
     lista_reg.column("ID Producto",width=150)
@@ -590,11 +618,18 @@ def vDet():
     bt_modificar = ctk.CTkButton(vDet,text="Modificar",command=modificar_reg, fg_color="#565b5e", hover_color="#6954a7")
     bt_modificar.grid(row=6,column=0,padx=10,pady=10)
 
+    def ordenar_columna(tree, col, reverse):
+        data = [ (tree.set(child, col), child) for child in tree.get_children('')]
+        data.sort(reverse=reverse)
+        for i, item in enumerate(data):
+            tree.move(item[1], '', i)
+        tree.heading(col, command=lambda: ordenar_columna(tree, col, not reverse))
+
     lista_reg = ttk.Treeview(vDet,columns=("ID","ID Cliente","ID Pedido","Cantidad"),show="headings",selectmode="browse")
-    lista_reg.heading("ID",text="ID")
-    lista_reg.heading("ID Cliente",text="ID Cliente")
-    lista_reg.heading("ID Pedido",text="ID Pedido")
-    lista_reg.heading("Cantidad",text="Cantidad")
+    lista_reg.heading("ID",text="ID", command=lambda: ordenar_columna(lista_reg, "ID", False))
+    lista_reg.heading("ID Cliente",text="ID Cliente", command=lambda: ordenar_columna(lista_reg, "ID Cliente", False))
+    lista_reg.heading("ID Pedido",text="ID Pedido", command=lambda: ordenar_columna(lista_reg, "ID Pedido", False))
+    lista_reg.heading("Cantidad",text="Cantidad", command=lambda: ordenar_columna(lista_reg, "Cantidad", False))
     lista_reg.column("ID",width=150)
     lista_reg.column("ID Cliente",width=150)
     lista_reg.column("ID Pedido",width=150)
@@ -670,7 +705,6 @@ def vGra():
 
     vGra.mainloop()
 
-
 def exportar():
     conn = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
 
@@ -697,42 +731,42 @@ lbl_TITULO.grid(row=0,column=0,padx=10,pady=10)
 lbl_SUBTITULO = ctk.CTkLabel(ventana,text="Esta aplicación le permitirá gestionar su tienda SuperBarrios",font=("Algerian",15))
 lbl_SUBTITULO.grid(row=1,column=0,padx=10,pady=10)
 
-bt_CATEGORIA = ctk.CTkButton(ventana, height=125, width=125,image=cat,text="", command=vCat, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_CATEGORIA = ctk.CTkButton(ventana, height=125, width=125,text="", command=vCat, fg_color='#9be3c7', hover_color="#FFFFFF")#,image=cat
 bt_CATEGORIA.grid(row=1,column=1, padx=10, pady=10)
 lbl_CATEGORIA = ctk.CTkLabel(ventana,text="Categoría", font=("Algerian",15))
 lbl_CATEGORIA.grid(row=2,column=1, padx=10,pady=10)
 
-bt_CLIENTE = ctk.CTkButton(ventana, height=125, width=125,image=cli,text="", command=vCli, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_CLIENTE = ctk.CTkButton(ventana, height=125, width=125,text="", command=vCli, fg_color='#9be3c7', hover_color="#FFFFFF")#,image=cli
 bt_CLIENTE.grid(row=1,column=2, padx=10, pady=10)
 lbl_CLIENTE = ctk.CTkLabel(ventana,text="Cliente", font=("Algerian",15))
 lbl_CLIENTE.grid(row=2,column=2, padx=10,pady=10)
 
-bt_PRODUCTO = ctk.CTkButton(ventana, height=125, width=125,image=pro,text="", command=vPro, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_PRODUCTO = ctk.CTkButton(ventana, height=125, width=125,text="", command=vPro, fg_color='#9be3c7', hover_color="#FFFFFF")#,image=pro
 bt_PRODUCTO.grid(row=1,column=3, padx=10, pady=10)
 lbl_PRODUCTO = ctk.CTkLabel(ventana,text="Producto", font=("Algerian",15))
 lbl_PRODUCTO.grid(row=2,column=3, padx=10,pady=10)
 
-bt_PEDIDO = ctk.CTkButton(ventana, height=125, width=125,image=ped,text="", command=vPed, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_PEDIDO = ctk.CTkButton(ventana, height=125, width=125,text="", command=vPed, fg_color='#9be3c7', hover_color="#FFFFFF")#,image=ped
 bt_PEDIDO.grid(row=3,column=1, padx=10, pady=10)
 lbl_PEDIDO = ctk.CTkLabel(ventana,text="Pedido", font=("Algerian",15))
 lbl_PEDIDO.grid(row=4,column=1, padx=10,pady=10)
 
-bt_DETALLE = ctk.CTkButton(ventana, height=125, width=125,image=det,text="", command=vDet, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_DETALLE = ctk.CTkButton(ventana, height=125, width=125,text="", command=vDet, fg_color='#9be3c7', hover_color="#FFFFFF")#,image=det
 bt_DETALLE.grid(row=3,column=2, padx=10, pady=10)
 lbl_DETALLE = ctk.CTkLabel(ventana,text="Detalle", font=("Algerian",15))
 lbl_DETALLE.grid(row=4,column=2, padx=10,pady=10)
 
-bt_BUSQUEDA = ctk.CTkButton(ventana, height=125, width=125,image=bus,text="", command=vBus, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_BUSQUEDA = ctk.CTkButton(ventana, height=125, width=125,text="", command=vBus, fg_color='#9be3c7', hover_color="#FFFFFF")#,image=bus
 bt_BUSQUEDA.grid(row=3,column=3, padx=10, pady=10)
 lbl_BUSQUEDA = ctk.CTkLabel(ventana,text="Busqueda", font=("Algerian",15))
 lbl_BUSQUEDA.grid(row=4,column=3, padx=10,pady=10)
 
-bt_GRAFICO = ctk.CTkButton(ventana, height=125, width=125,image=gra,text="", command=vGra, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_GRAFICO = ctk.CTkButton(ventana, height=125, width=125,text="", command=vGra, fg_color='#9be3c7', hover_color="#FFFFFF")#,image=gra
 bt_GRAFICO.grid(row=5,column=1, padx=10, pady=10)
 lbl_GRAFICO = ctk.CTkLabel(ventana,text="Graficos", font=("Algerian",15))
 lbl_GRAFICO.grid(row=6,column=1, padx=10,pady=10)
 
-bt_GRAFICO = ctk.CTkButton(ventana, height=125, width=125,image=exl,text="", command=exportar, fg_color='#9be3c7', hover_color="#FFFFFF")#
+bt_GRAFICO = ctk.CTkButton(ventana, height=125, width=125,text="", command=exportar, fg_color='#9be3c7', hover_color="#FFFFFF")#,image=exl
 bt_GRAFICO.grid(row=5,column=2, padx=10, pady=10)
 lbl_GRAFICO = ctk.CTkLabel(ventana,text="Exportar", font=("Algerian",15))
 lbl_GRAFICO.grid(row=6,column=2, padx=10,pady=10)

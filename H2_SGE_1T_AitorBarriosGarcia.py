@@ -690,8 +690,7 @@ def vGra1():
     productos = dataframe.iloc[0:,1]
 
     print(productos)
-
-
+    
     fig, ax = plt.subplots()
 
     ax.set_xlabel('Productos')

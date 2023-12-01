@@ -684,10 +684,12 @@ def vBus():
 
 def vGra1():
 
-    dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="producto")
+    dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="producto",skiprows=0)
 
     datos = dataframe.iloc[1:,2]
-    productos = dataframe.iloc[1:,2]
+    productos = dataframe.iloc[0:,1]
+
+    print(productos)
 
 
     fig, ax = plt.subplots()
@@ -702,14 +704,10 @@ def vGra2():
     dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="pedido")
 
     datos = dataframe.iloc[1:,2]
-    productos = dataframe.iloc[1:,2]
-
+    productos = dataframe.iloc[1:,1]
 
     fig, ax = plt.subplots()
-
-    ax.set_xlabel('Productos')
-    ax.set_ylabel('Cantidad de Stock')
-    ax.bar(productos,datos)
+    ax.pie(datos,labels=productos)
     plt.show()
 
 def vGra3():
@@ -753,6 +751,8 @@ lbl_TITULO = ctk.CTkLabel(ventana,text="BIENVENIDO A SUPERBARRIOS",font=("Algeri
 lbl_TITULO.grid(row=0,column=0,padx=10,pady=10)
 lbl_SUBTITULO = ctk.CTkLabel(ventana,text="Esta aplicación le permitirá gestionar su tienda SuperBarrios",font=("Algerian",15))
 lbl_SUBTITULO.grid(row=1,column=0,padx=10,pady=10)
+lbl_SUBTITULO2 = ctk.CTkLabel(ventana,text="Exportar datos para ver correctamente los graficos",font=("Algerian",15))
+lbl_SUBTITULO2.grid(row=2,column=0,padx=10,pady=10)
 
 bt_CATEGORIA = ctk.CTkButton(ventana, height=125, width=125,text="", command=vCat, fg_color='#9be3c7', hover_color="#FFFFFF",image=cat)#
 bt_CATEGORIA.grid(row=1,column=1, padx=10, pady=10)

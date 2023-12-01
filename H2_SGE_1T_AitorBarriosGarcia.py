@@ -683,7 +683,7 @@ def vBus():
     vBus.mainloop()
 
 def vGra1():
-
+    #GRAFICO DE PRODUCTO
     dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="producto",skiprows=0)
 
     datos = dataframe.iloc[1:,2]

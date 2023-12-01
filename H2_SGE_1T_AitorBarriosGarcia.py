@@ -686,8 +686,8 @@ def vGra1():
     #GRAFICO DE PRODUCTO
     dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="producto",skiprows=0)
 
-    datos = dataframe.iloc[1:,2]
-    productos = dataframe.iloc[0:,1]
+    datos = dataframe.iloc[1:,2] #stock
+    productos = dataframe.iloc[0:,1] #nombre
 
     print(productos)
 
@@ -700,10 +700,10 @@ def vGra1():
 
 def vGra2():
 
-    dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="cliente")
+    dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="detalle")
 
-    datos = dataframe.iloc[1:,2]
-    productos = dataframe.iloc[1:,1]
+    datos = dataframe.iloc[1:,2] #cantidad
+    productos = dataframe.iloc[1:,1] #idcli
 
     fig, ax = plt.subplots()
     ax.pie(datos,labels=productos)

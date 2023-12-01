@@ -690,7 +690,7 @@ def vGra1():
     productos = dataframe.iloc[0:,1]
 
     print(productos)
-    
+
     fig, ax = plt.subplots()
 
     ax.set_xlabel('Productos')
@@ -700,7 +700,7 @@ def vGra1():
 
 def vGra2():
 
-    dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="pedido")
+    dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="cliente")
 
     datos = dataframe.iloc[1:,2]
     productos = dataframe.iloc[1:,1]

@@ -5,28 +5,29 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from PIL import Image
 from tkinter import messagebox,ttk,Scrollbar,Label,Entry,Button,END
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 ventana = ctk.CTk()
 ventana.title("H2_SistemasGestionEmpresarial_1T_AitorBarriosGarcía")
 ventana.resizable(False,False)
 ventana.geometry("1000x850")
 
-cat = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//categoria.png"),
-                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//categoria.png"),size=(70,70))
-cli = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//cliente.png"),
-                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//cliente.png"),size=(100,80))
-pro = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//producto.png"),
-                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//producto.png"),size=(70,70))
-ped = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//pedido.png"),
-                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//pedido.png"),size=(70,70))
-det = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//detalle.png"),
-                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//detalle.png"),size=(70,70))
-bus = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//busqueda.png"),
-                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//busqueda.png"),size=(70,70))
-gra = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//grafico.png"),
-                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//grafico.png"),size=(70,70))
-exl = ctk.CTkImage(light_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//excel.png"),
-                    dark_image=Image.open("G://Mi unidad//2ºDAM//Sistemas de Gestión Empresarial//HITOS//H2_SistemasGestionEmpresarial_1T_Aitor_BarriosGarcia//img//excel.png"),size=(70,70))
+cat = ctk.CTkImage(light_image=Image.open("img/categoria.png"),
+                    dark_image=Image.open("img/categoria.png"),size=(70,70))
+cli = ctk.CTkImage(light_image=Image.open("img/cliente.png"),
+                    dark_image=Image.open("img/cliente.png"),size=(100,80))
+pro = ctk.CTkImage(light_image=Image.open("img/producto.png"),
+                    dark_image=Image.open("img/producto.png"),size=(70,70))
+ped = ctk.CTkImage(light_image=Image.open("img/pedido.png"),
+                    dark_image=Image.open("img/pedido.png"),size=(70,70))
+det = ctk.CTkImage(light_image=Image.open("img/detalle.png"),
+                    dark_image=Image.open("img/detalle.png"),size=(70,70))
+bus = ctk.CTkImage(light_image=Image.open("img/busqueda.png"),
+                    dark_image=Image.open("img/busqueda.png"),size=(70,70))
+gra = ctk.CTkImage(light_image=Image.open("img/grafico.png"),
+                    dark_image=Image.open("img/grafico.png"),size=(70,70))
+exl = ctk.CTkImage(light_image=Image.open("img/excel.png"),
+                    dark_image=Image.open("img/excel.png"),size=(70,70))
 
 def vCat():
     def crear_reg():
@@ -683,47 +684,79 @@ def vBus():
     vBus.mainloop()
 
 def vGra1():
-    #GRAFICO DE PRODUCTO
-    dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="producto",skiprows=0)
+    vGra1 = ctk.CTkToplevel(ventana)
+    vGra1.title("Pedidos de Productos por Fecha")
+    vGra1.resizable(False, False)
+    vGra1.geometry("1000x850")
 
-    datos = dataframe.iloc[1:,2] #stock
-    productos = dataframe.iloc[0:,1] #nombre
+    conexion = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
 
-    print(productos)
+    sql = pd.read_sql_query('''SELECT producto.nombre, pedido.fecha FROM pedido INNER JOIN producto ON pedido.idpro = producto.idpro''', conexion)
+    df = pd.DataFrame(sql, columns=['nombre', 'fecha'])
 
-    fig, ax = plt.subplots()
+    df['fecha'] = pd.to_datetime(df['fecha'])
 
-    ax.set_xlabel('Productos')
-    ax.set_ylabel('Cantidad de Stock')
-    ax.bar(productos,datos)
-    plt.show()
-
-def vGra2():
-
-    dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="detalle")
-
-    datos = dataframe.iloc[1:,2] #cantidad
-    productos = dataframe.iloc[1:,1] #idcli
+    conteo_productos_por_fecha = df.groupby('fecha').size()
 
     fig, ax = plt.subplots()
-    ax.pie(datos,labels=productos)
-    plt.show()
+    ax.plot(conteo_productos_por_fecha.index, conteo_productos_por_fecha.values)
+
+    ax.xaxis.set_major_locator(plt.MaxNLocator(nbins=10))
+
+    ax.set_xlabel('Fecha')
+    ax.set_ylabel('Cantidad de productos pedidos')
+    ax.set_title('Pedidos de Productos por Fecha')
+
+    canvas = FigureCanvasTkAgg(fig, master=vGra1)
+    canvas_widget = canvas.get_tk_widget()
+    canvas_widget.grid(row=0, column=0)
+
+    vGra1.mainloop()
+
+def vGra2():    
+    vGra2 = ctk.CTkToplevel(ventana)
+    vGra2.title("Pedidos de Clientes")
+    vGra2.resizable(False, False)
+    vGra2.geometry("1000x850")
+
+    conexion = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
+
+    sql = pd.read_sql_query('''SELECT cliente.nombre, COUNT(detalle.idcli) as cantidad_pedidos FROM detalle INNER JOIN cliente ON detalle.idcli = cliente.idcli GROUP BY cliente.nombre''', conexion)
+    df = pd.DataFrame(sql, columns=['nombre', 'cantidad_pedidos'])
+
+    fig, ax = plt.subplots()
+    ax.pie(df['cantidad_pedidos'], labels=df['nombre'], autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')
+
+    canvas = FigureCanvasTkAgg(fig, master=vGra2)
+    canvas_widget = canvas.get_tk_widget()
+    canvas_widget.grid(row=0, column=0)
+
+    vGra2.mainloop()
 
 def vGra3():
+    vGra3 = ctk.CTkToplevel(ventana)
+    vGra3.title("Gráfico Productos")
+    vGra3.resizable(False,False)
+    vGra3.geometry("1000x850")
 
-    dataframe = pd.read_excel("H2_SGE_1T_AitorBarriosGarcia.xlsx",sheet_name="pedido")
+    conexion = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
 
-    datos = dataframe.iloc[1:,2]
-    productos = dataframe.iloc[1:,2]
-
+    sql = pd.read_sql_query('''SELECT nombre, stock FROM producto''', conexion)
+    df = pd.DataFrame(sql, columns=['nombre', 'stock'])
 
     fig, ax = plt.subplots()
+    ax.bar(df['nombre'], df['stock'])
 
-    ax.set_xlabel('Productos')
-    ax.set_ylabel('Cantidad de Stock')
-    ax.bar(productos,datos)
-    plt.show()
+    ax.set_ylabel('Stock')
+    ax.set_xlabel('Nombre del producto')
+    ax.set_title('Stock de cada producto')
 
+    canvas = FigureCanvasTkAgg(fig, master=vGra3)
+    canvas_widget = canvas.get_tk_widget()
+    canvas_widget.grid(row=0,column=0)
+
+    vGra3.mainloop()
 
 def exportar():
     conn = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
@@ -744,7 +777,6 @@ def exportar():
 
     print(f'Datos exportados exitosamente a {archivo_excel}')
     messagebox.showinfo("✔","Datos exportados")
-
 
 lbl_TITULO = ctk.CTkLabel(ventana,text="BIENVENIDO A SUPERBARRIOS",font=("Algerian",25))
 lbl_TITULO.grid(row=0,column=0,padx=10,pady=10)
@@ -802,6 +834,5 @@ bt_EXPORTAR = ctk.CTkButton(ventana, height=125, width=125,text="", command=expo
 bt_EXPORTAR.grid(row=7,column=1, padx=10, pady=10)
 lbl_EXPORTAR = ctk.CTkLabel(ventana,text="Exportar", font=("Algerian",15))
 lbl_EXPORTAR.grid(row=8,column=1, padx=10,pady=10)
-
 
 ventana.mainloop()

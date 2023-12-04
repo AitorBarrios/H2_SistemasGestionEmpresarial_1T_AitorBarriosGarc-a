@@ -684,28 +684,27 @@ def vBus():
     vBus.mainloop()
 
 def vGra1():
-    vGra1 = ctk.CTkToplevel(ventana)
+    vGra1 = ctk.CTk()
     vGra1.title("Pedidos de Productos por Fecha")
     vGra1.resizable(False, False)
     vGra1.geometry("1000x850")
 
     conexion = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
 
-    sql = pd.read_sql_query('''SELECT producto.nombre, pedido.fecha FROM pedido INNER JOIN producto ON pedido.idpro = producto.idpro''', conexion)
-    df = pd.DataFrame(sql, columns=['nombre', 'fecha'])
-
-    df['fecha'] = pd.to_datetime(df['fecha'])
+    sql = pd.read_sql_query('''SELECT detalle.cantidad, pedido.fecha FROM pedido INNER JOIN detalle ON pedido.idped = detalle.idped''', conexion)
+    df = pd.DataFrame(sql, columns=['detalle', 'fecha'])
 
     conteo_productos_por_fecha = df.groupby('fecha').size()
 
     fig, ax = plt.subplots()
-    ax.plot(conteo_productos_por_fecha.index, conteo_productos_por_fecha.values)
+    ax.bar(conteo_productos_por_fecha.index, conteo_productos_por_fecha)
 
     ax.xaxis.set_major_locator(plt.MaxNLocator(nbins=10))
 
     ax.set_xlabel('Fecha')
-    ax.set_ylabel('Cantidad de productos pedidos')
+    ax.set_ylabel('Cantidad de productos ordenados')
     ax.set_title('Pedidos de Productos por Fecha')
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=25, ha='right')
 
     canvas = FigureCanvasTkAgg(fig, master=vGra1)
     canvas_widget = canvas.get_tk_widget()
@@ -713,9 +712,9 @@ def vGra1():
 
     vGra1.mainloop()
 
-def vGra2():    
+def vGra2():
     vGra2 = ctk.CTkToplevel(ventana)
-    vGra2.title("Pedidos de Clientes")
+    vGra2.title("Gráfico Clientes")
     vGra2.resizable(False, False)
     vGra2.geometry("1000x850")
 
@@ -735,9 +734,9 @@ def vGra2():
     vGra2.mainloop()
 
 def vGra3():
-    vGra3 = ctk.CTkToplevel(ventana)
+    vGra3 = tk.Tk()
     vGra3.title("Gráfico Productos")
-    vGra3.resizable(False,False)
+    vGra3.resizable(False, False)
     vGra3.geometry("1000x850")
 
     conexion = sqlite3.connect('H2_SGE_1T_AitorBarriosGarcia.db')
@@ -746,7 +745,7 @@ def vGra3():
     df = pd.DataFrame(sql, columns=['nombre', 'stock'])
 
     fig, ax = plt.subplots()
-    ax.bar(df['nombre'], df['stock'])
+    ax.plot(df['nombre'], df['stock'], marker='o')  # Cambiado de bar a plot
 
     ax.set_ylabel('Stock')
     ax.set_xlabel('Nombre del producto')
@@ -754,7 +753,7 @@ def vGra3():
 
     canvas = FigureCanvasTkAgg(fig, master=vGra3)
     canvas_widget = canvas.get_tk_widget()
-    canvas_widget.grid(row=0,column=0)
+    canvas_widget.grid(row=0, column=0)
 
     vGra3.mainloop()
 
@@ -817,17 +816,17 @@ lbl_BUSQUEDA.grid(row=4,column=3, padx=10,pady=10)
 
 bt_GRAFICO = ctk.CTkButton(ventana, height=125, width=125,text="", command=vGra1, fg_color='#9be3c7', hover_color="#FFFFFF",image=gra)#
 bt_GRAFICO.grid(row=5,column=1, padx=10, pady=10)
-lbl_GRAFICO = ctk.CTkLabel(ventana,text="Grafico 1", font=("Algerian",15))
+lbl_GRAFICO = ctk.CTkLabel(ventana,text="Fechas", font=("Algerian",15))
 lbl_GRAFICO.grid(row=6,column=1, padx=10,pady=10)
 
 bt_GRAFICO2 = ctk.CTkButton(ventana, height=125, width=125,text="", command=vGra2, fg_color='#9be3c7', hover_color="#FFFFFF",image=gra)#
 bt_GRAFICO2.grid(row=5,column=2, padx=10, pady=10)
-lbl_GRAFICO2 = ctk.CTkLabel(ventana,text="Grafico 2", font=("Algerian",15))
+lbl_GRAFICO2 = ctk.CTkLabel(ventana,text="Clientes", font=("Algerian",15))
 lbl_GRAFICO2.grid(row=6,column=2, padx=10,pady=10)
 
 bt_GRAFICO3 = ctk.CTkButton(ventana, height=125, width=125,text="", command=vGra3, fg_color='#9be3c7', hover_color="#FFFFFF",image=gra)#
 bt_GRAFICO3.grid(row=5,column=3, padx=10, pady=10)
-lbl_GRAFICO3 = ctk.CTkLabel(ventana,text="Grafico 3", font=("Algerian",15))
+lbl_GRAFICO3 = ctk.CTkLabel(ventana,text="Productos", font=("Algerian",15))
 lbl_GRAFICO3.grid(row=6,column=3, padx=10,pady=10)
 
 bt_EXPORTAR = ctk.CTkButton(ventana, height=125, width=125,text="", command=exportar, fg_color='#9be3c7', hover_color="#FFFFFF",image=exl)#
